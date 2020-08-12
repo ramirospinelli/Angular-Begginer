@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {IProduct} from './product';
 import{ProductService} from './product.service';
+import { Observable } from 'rxjs';
 
 @Component({
 selector: 'pm-products',
@@ -15,6 +16,7 @@ export class ProductListComponent implements OnInit{
     showImage: boolean = false;
     filteredProducts: IProduct[];
     _listFilter: string = '';
+    products: IProduct[];
 
     get listFilter(): string {
       return this._listFilter;
@@ -24,7 +26,7 @@ export class ProductListComponent implements OnInit{
       this._listFilter = value;
       this.filteredProducts = this._listFilter ? this.performFilter(this.listFilter) : this.products;
     }
-    products: IProduct[];
+    
 
      constructor(private productService: ProductService) {
      }
@@ -45,9 +47,13 @@ export class ProductListComponent implements OnInit{
      }
 
      ngOnInit(): void {
-       this.products = this.productService.getProducts();
-       this.filteredProducts = this.products;
-     }
-
-
-}
+       this.productService.getProducts().subscribe({
+         next: response => {
+           this.products = response;
+           this.filteredProducts = this.products;
+       },
+      error: err => console.log(err)
+    });
+      
+        }
+      }
