@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {IProduct} from './product';
 import{ProductService} from './product.service';
-import { Observable } from 'rxjs';
 
 @Component({
 templateUrl: './product-list.component.html',
